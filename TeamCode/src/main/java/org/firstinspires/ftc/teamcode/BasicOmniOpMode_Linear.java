@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -77,7 +78,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
        robotchasis.init();
-
+        RobotArm.init();
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -101,16 +102,23 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
             if (gamepad1.a){
-                RobotArm.MoveArm(100, 0.2);
+                RobotArm.moveToStart();
             }
             if (gamepad1.b) {
-                RobotArm.MoveArm(-100, 0.2);
+                RobotArm.moveToHang();
             }
+            if (gamepad1.x) {
+                RobotArm.moveToCollection();
+            }
+            telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
+
             // Show the elapsed game time and wheel power.
             /*telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.update();*/
+
+             */
+            telemetry.update();
         }
     }
 }
