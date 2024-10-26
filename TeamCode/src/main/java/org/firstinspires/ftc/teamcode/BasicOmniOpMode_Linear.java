@@ -70,7 +70,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
     private chasis robotchasis = new chasis(this);
-
+    private Arm RobotArm = new Arm( this);
     @Override
     public void runOpMode() {
 
@@ -100,8 +100,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
-
-
+            if (gamepad1.a){
+                RobotArm.MoveArm(100, 0.2);
+            }
+            if (gamepad1.b) {
+                RobotArm.MoveArm(-100, 0.2);
+            }
             // Show the elapsed game time and wheel power.
             /*telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);

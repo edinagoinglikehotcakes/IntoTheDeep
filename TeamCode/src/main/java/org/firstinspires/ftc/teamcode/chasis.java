@@ -14,15 +14,10 @@ public class chasis {
     private DcMotor RightFrontDrive = null;
     private DcMotor LeftBackDrive = null;
     private DcMotor RightBackDrive = null;
-    private DcMotor ArmMotor = null;
-    private Servo   claw = null;
-    private Servo   Wrist = null;
 
 
-    public static final double MID_SERVO       = 0.5 ;
-    public static final double HAND_SPEED      = 0.02 ;
-    public static final double ARM_UP_POWER    = 0.45 ;
-    public static final double ARM_DOWN_POWER  = -0.45 ;
+
+
 
 
 
@@ -40,9 +35,7 @@ public class chasis {
         LeftBackDrive = myOpMode.hardwareMap.get(DcMotor.class, "Backleft");
         RightFrontDrive = myOpMode.hardwareMap.get(DcMotor.class, "Frontright");
         RightBackDrive = myOpMode.hardwareMap.get(DcMotor.class, "Backright");
-        ArmMotor = myOpMode.hardwareMap.get(DcMotor.class, "ArmMotor");
-        Wrist = myOpMode.hardwareMap.get(Servo.class, "Wrist_Servo");
-        claw = myOpMode.hardwareMap.get(Servo.class, "Claw_Servo");
+
 
 
 

@@ -51,5 +51,3 @@ public void MoveArm(int Position, double Speed) {
 
     }
 }
-
-}
