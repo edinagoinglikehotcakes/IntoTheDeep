@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+@Config
 public class Arm {
+    int remeber_Position;
     private LinearOpMode myOpMode = null;
+    private Telemetry tel = null;
 
     private DcMotor ArmMotor = null;
     private Servo claw = null;
@@ -14,25 +21,28 @@ public class Arm {
 
     private boolean initialized = false;
 
-    public static final double MID_SERVO       = 0.5 ;
-    public static final double HAND_SPEED      = 0.02 ;
-    public static final double ARM_UP_POWER    = 0.45 ;
-    public static final double ARM_DOWN_POWER  = -0.45 ;
-    public static final double OPENPOSITION    = 0.0 ;
-    public static final double CLOSEPOSITION   = 0.2 ;
+    public static double MID_SERVO       = 0.5 ;
+    public static double HAND_SPEED      = 0.02 ;
+    public static double ARM_UP_POWER    = 0.45 ;
+    public static double ARM_DOWN_POWER  = -0.45 ;
+    public static double OPENPOSITION    = 0.0 ;
+    public static double CLOSEPOSITION   = 0.2 ;
 
-    public static final int START_POSITION          = 20;
-    public static final int COLLECTION_POSITION     = 4000;
-    public static final int OVER_BARRIER_POSITION   = 100;
-    public static final int PUT_IN_BASKET_POSITION  = 40;
-    public static final int PUT_ON_CHAMBER_POSITION = 45;
-    public static final int ATTACH_TO_RUNG_POSITION = 15;
-    public static final int HANGING_POSITION        = 2000;
-
+    public static int START_POSITION          = 20;
+    public static int COLLECTION_POSITION     = 4000;
+    public static int OVER_BARRIER_POSITION   = 100;
+    public static int PUT_IN_BASKET_POSITION  = 40;
+    public static int PUT_ON_CHAMBER_POSITION = 45;
+    public static int ATTACH_TO_RUNG_POSITION = 15;
+    public static int HANGING_POSITION        = 2000;
+    public static double STARTWRIST              = 0;
+    public static double COLLECTIONWRIST         = 10.;
+    public static double BASKETANDCHAMBERWRIST   = 50;
     public static final double MOVESPEED = 0.4;
 
-    public Arm (LinearOpMode opmode) {
+    public Arm (LinearOpMode opmode, Telemetry telemetry) {
         myOpMode = opmode;
+        tel = telemetry;
     }
 
     public void init() {
@@ -53,13 +63,16 @@ public class Arm {
         claw.setPosition((CLOSEPOSITION));
     }
     public void MoveArm(int Position, double Speed) {
-        if (!initialized || true) {
+       remeber_Position=Position;
+       if (!initialized || true) {
             ArmMotor.setTargetPosition(Position);
             ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ArmMotor.setPower(Speed);
             initialized = true;
         }
-        if (ArmMotor.getCurrentPosition()== Position) {
+
+       tel.addData("target current", "%d %d", Position , ArmMotor.getCurrentPosition());
+       if (ArmMotor.getCurrentPosition()== Position) {
             ArmMotor.setPower(0);
             initialized = false;
             return;
@@ -92,6 +105,15 @@ public class Arm {
     public void moveToHang(){
         MoveArm(HANGING_POSITION,MOVESPEED);
     }
-
+    public void startWrist () {
+        Wrist.setPosition((STARTWRIST));
+    }
+    public void collectionwrist () {
+        Wrist.setPosition((COLLECTIONWRIST));
+    }
+    public void basketandchamberwrist (){
+        Wrist.setPosition((BASKETANDCHAMBERWRIST));
+    }
 }
-
+/*yay.java EXISTS ONCE MORE!!!!
+AND BOB ISNT LONLEY*/

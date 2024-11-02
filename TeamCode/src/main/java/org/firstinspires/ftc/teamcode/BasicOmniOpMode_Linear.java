@@ -71,7 +71,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
     private chasis robotchasis = new chasis(this);
-    private Arm RobotArm = new Arm( this);
+    private Arm RobotArm = new Arm( this, telemetry);
     @Override
     public void runOpMode() {
 
@@ -92,6 +92,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
 
         // Wait for the game to start (driver presses START)
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -104,11 +105,38 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             if (gamepad1.a){
                 RobotArm.moveToStart();
             }
-            if (gamepad1.b) {
+            if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
             }
             if (gamepad1.x) {
                 RobotArm.moveToCollection();
+            }
+            if (gamepad1.dpad_up) {
+                RobotArm.moveToClimb();
+            }
+            if (gamepad1.dpad_right) {
+                RobotArm.moveToChamber();
+            }
+            if (gamepad1.y) {
+                RobotArm.moveToBasket();
+            }
+            if (gamepad1.right_bumper) {
+                RobotArm.moveToOverBarrier();
+            }
+            if (gamepad1.b) {
+                RobotArm.open_clawthingy();
+            }
+            if (gamepad1.dpad_left) {
+                RobotArm.close_clawthingy();
+            }
+            if (gamepad1.left_bumper) {
+                RobotArm.startWrist();
+            }
+            if (gamepad1.start) {
+                RobotArm.collectionwrist();
+            }
+            if (gamepad1.back) {
+                RobotArm.basketandchamberwrist();
             }
             telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
 
