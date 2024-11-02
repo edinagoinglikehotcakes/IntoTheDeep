@@ -43,7 +43,6 @@ public class Arm {
     public static double ARM_DOWN_POWER  = -0.45 ;
     public static double OPENPOSITION    = 0.0 ;
     public static double CLOSEPOSITION   = 0.2 ;
->>>>>>> 735023bddd1169f0dcebc11d9028840fb60ee098
 
     public static int START_POSITION          = 20;
     public static int COLLECTION_POSITION     = 4000;
