@@ -45,12 +45,12 @@ public class Arm {
     public static double CLOSEPOSITION   = 0.2 ;
 
     public static int START_POSITION          = 20;
-    public static int COLLECTION_POSITION     = 4000;
-    public static int OVER_BARRIER_POSITION   = 100;
-    public static int PUT_IN_BASKET_POSITION  = 40;
-    public static int PUT_ON_CHAMBER_POSITION = 45;
-    public static int ATTACH_TO_RUNG_POSITION = 15;
-    public static int HANGING_POSITION        = 2000;
+    public static int COLLECTION_POSITION     = 3800;
+    public static int OVER_BARRIER_POSITION   = 3600;
+    public static int PUT_IN_BASKET_POSITION  = 2200;
+    public static int PUT_ON_CHAMBER_POSITION = 2500;
+    public static int ATTACH_TO_RUNG_POSITION = 1850;
+    public static int HANGING_POSITION        = 4000;
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.5;
     public static double BASKETANDCHAMBERWRIST   = 0.5;
