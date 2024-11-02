@@ -36,8 +36,8 @@ public class Arm {
     public static int ATTACH_TO_RUNG_POSITION = 15;
     public static int HANGING_POSITION        = 2000;
     public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 10.;
-    public static double BASKETANDCHAMBERWRIST   = 50;
+    public static double COLLECTIONWRIST         = 0.5;
+    public static double BASKETANDCHAMBERWRIST   = 0.5;
     public static final double MOVESPEED = 0.4;
 
     public Arm (LinearOpMode opmode, Telemetry telemetry) {
