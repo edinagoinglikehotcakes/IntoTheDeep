@@ -65,7 +65,7 @@ public class chasis {
         if (max > 1.0) {
             leftFrontPower  /= max;
             rightFrontPower /= max;
-            LeftBackDrive   /= max;
+            leftBackPower   /= max;
             rightBackPower  /= max;
         }
 

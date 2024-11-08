@@ -102,40 +102,40 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
-            if (gamepad1.a){
+            if (gamepad1.start){
                 RobotArm.moveToStart();
             }
             if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
             }
-            if (gamepad1.x) {
+            if (gamepad1.a) {
                 RobotArm.moveToCollection();
             }
             if (gamepad1.dpad_up) {
                 RobotArm.moveToClimb();
             }
-            if (gamepad1.dpad_right) {
+            if (gamepad1.y) {
                 RobotArm.moveToChamber();
             }
-            if (gamepad1.y) {
+            if (gamepad1.x) {
                 RobotArm.moveToBasket();
             }
-            if (gamepad1.right_bumper) {
+            if (gamepad1.b) {
                 RobotArm.moveToOverBarrier();
             }
-            if (gamepad1.b) {
+            if (gamepad1.right_bumper) {
                 RobotArm.open_clawthingy();
             }
-            if (gamepad1.dpad_left) {
+            if (gamepad1.left_bumper) {
                 RobotArm.close_clawthingy();
             }
-            if (gamepad1.left_bumper) {
+            if (gamepad1.dpad_left) {
                 RobotArm.startWrist();
             }
-            if (gamepad1.start) {
+            if (gamepad1.dpad_right) {
                 RobotArm.collectionwrist();
             }
-            if (gamepad1.back) {
+            if (gamepad1.left_stick_button) {
                 RobotArm.basketandchamberwrist();
             }
             telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
