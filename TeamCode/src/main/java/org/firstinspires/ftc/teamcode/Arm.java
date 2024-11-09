@@ -27,7 +27,7 @@ public class Arm {
     public static double CLOSEPOSITION   = 0.55 ;
 
     public static int START_POSITION          = 20;
-    public static int COLLECTION_POSITION     = 3800;
+    public static int COLLECTION_POSITION     = 3650;
     public static int OVER_BARRIER_POSITION   = 3600;
     public static int MAX_COLLECTION_WRIST    = 3000;
     public static int PUT_IN_BASKET_POSITION  = 2200;
@@ -36,7 +36,7 @@ public class Arm {
     public static int HANGING_POSITION        = 4500;
 
     public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 0.6;
+    public static double COLLECTIONWRIST         = 0.575;
     public static double BASKETANDCHAMBERWRIST   = 0.42;
     public static double MOVESPEED = 0.4;
 
