@@ -20,24 +20,24 @@ public class Arm {
     private Servo   Wrist = null;
 
     private boolean initialized = false;
-
-    public static double MID_SERVO       = 0.5 ;
-    public static double HAND_SPEED      = 0.02 ;
+    public static final double MID_SERVO       = 0.5 ;
+    public static final double HAND_SPEED      = 0.02 ;
     public static double ARM_UP_POWER    = 0.45 ;
     public static double ARM_DOWN_POWER  = -0.45 ;
-    public static double OPENPOSITION    = 0.0 ;
-    public static double CLOSEPOSITION   = 0.2 ;
+    public static double OPENPOSITION    = 0.7 ;
+    public static double CLOSEPOSITION   = 1 ;
 
     public static int START_POSITION          = 20;
     public static int COLLECTION_POSITION     = 3800;
     public static int OVER_BARRIER_POSITION   = 3600;
     public static int PUT_IN_BASKET_POSITION  = 2200;
     public static int PUT_ON_CHAMBER_POSITION = 2500;
-    public static int ATTACH_TO_RUNG_POSITION = 1850;
-    public static int HANGING_POSITION        = 4000;
+    public static int ATTACH_TO_RUNG_POSITION = 4000;
+    public static int HANGING_POSITION        = 4500;
+
     public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 0.5;
-    public static double BASKETANDCHAMBERWRIST   = 0.5;
+    public static double COLLECTIONWRIST         = 0.6;
+    public static double BASKETANDCHAMBERWRIST   = 0.42;
     public static final double MOVESPEED = 0.4;
 
     public Arm (LinearOpMode opmode, Telemetry telemetry) {
@@ -84,7 +84,6 @@ public class Arm {
 
     public void moveToStart(){
         MoveArm(START_POSITION,MOVESPEED);
-        open_clawthingy();
     }
     public void moveToCollection(){
         MoveArm(COLLECTION_POSITION,MOVESPEED);
@@ -114,6 +113,15 @@ public class Arm {
     public void basketandchamberwrist (){
         Wrist.setPosition((BASKETANDCHAMBERWRIST));
     }
+
+    public void setWristPosition(double pos) {
+        Wrist.setPosition(pos);
+    }
+    public void setClawPosition(double pos) {
+        claw.setPosition(pos);
+    }
+    public double getWristPosition() {return Wrist.getPosition();}
+    public double getClawPosition() {return claw.getPosition();}
 }
 /*yay.java EXISTS ONCE MORE!!!!
 AND BOB ISNT LONLEY*/

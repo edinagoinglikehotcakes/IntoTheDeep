@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -102,45 +103,55 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
-            if (gamepad1.a){
+            if (gamepad1.start){
                 RobotArm.moveToStart();
+                RobotArm.startWrist();
+                RobotArm.open_clawthingy();
             }
             if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
             }
-            if (gamepad1.x) {
+            if (gamepad1.a) {
                 RobotArm.moveToCollection();
+                RobotArm.collectionwrist();
             }
             if (gamepad1.dpad_up) {
                 RobotArm.moveToClimb();
             }
-            if (gamepad1.dpad_right) {
-                RobotArm.moveToChamber();
-            }
             if (gamepad1.y) {
-                RobotArm.moveToBasket();
-            }
-            if (gamepad1.right_bumper) {
-                RobotArm.moveToOverBarrier();
-            }
-            if (gamepad1.b) {
-                RobotArm.open_clawthingy();
-            }
-            if (gamepad1.dpad_left) {
-                RobotArm.close_clawthingy();
-            }
-            if (gamepad1.left_bumper) {
-                RobotArm.startWrist();
-            }
-            if (gamepad1.start) {
-                RobotArm.collectionwrist();
-            }
-            if (gamepad1.back) {
+                RobotArm.moveToChamber();
                 RobotArm.basketandchamberwrist();
             }
-            telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
+            if (gamepad1.x) {
+                RobotArm.moveToBasket();
+                RobotArm.basketandchamberwrist();
+            }
+            if (gamepad1.b) {
+                RobotArm.moveToOverBarrier();
+            }
+            if (gamepad1.right_bumper) {
+                //double p = RobotArm.open_clawthingy();
+                //telemetry.addData("Status", "Claw position: " + p);
+                RobotArm.startWrist();
+            }
+            if (gamepad1.left_bumper) {
+                //double p = RobotArm.close_clawthingy();
+                //telemetry.addData("Status", "Claw position: " + p);
+                RobotArm.collectionwrist();
+            }
+            if (gamepad1.dpad_left) {
+                RobotArm.startWrist();
+            }
+            if (gamepad1.dpad_right) {
+                RobotArm.collectionwrist();
+            }
+            if (gamepad1.left_stick_button) {
+                RobotArm.basketandchamberwrist();
+            }
+
 
             // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
             /*telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
