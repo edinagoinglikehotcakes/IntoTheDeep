@@ -65,7 +65,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Omni Linear OpMode", group="Linear OpMode")
+@TeleOp(name="Manual Driving", group="Linear OpMode")
 
 public class BasicOmniOpMode_Linear extends LinearOpMode {
 
@@ -106,7 +106,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             if (gamepad1.start){
                 RobotArm.moveToStart();
                 RobotArm.startWrist();
-                RobotArm.open_clawthingy();
+                //RobotArm.open_clawthingy();
             }
             if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
@@ -130,16 +130,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 RobotArm.moveToOverBarrier();
             }
             if (gamepad1.right_bumper) {
-                //double p = RobotArm.open_clawthingy();
-                //telemetry.addData("Status", "Claw position: " + p);
-                RobotArm.startWrist();
+                RobotArm.open_clawthingy();
             }
             if (gamepad1.left_bumper) {
-                //double p = RobotArm.close_clawthingy();
-                //telemetry.addData("Status", "Claw position: " + p);
-                RobotArm.collectionwrist();
+                RobotArm.close_clawthingy();
             }
-            if (gamepad1.dpad_left) {
+ /*           if (gamepad1.dpad_left) {
                 RobotArm.startWrist();
             }
             if (gamepad1.dpad_right) {
@@ -148,7 +144,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             if (gamepad1.left_stick_button) {
                 RobotArm.basketandchamberwrist();
             }
-
+*/
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Arm position: " + RobotArm.getpos());

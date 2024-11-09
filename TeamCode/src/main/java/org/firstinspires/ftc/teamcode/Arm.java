@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.ServoCommands;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
@@ -20,16 +23,13 @@ public class Arm {
     private Servo   Wrist = null;
 
     private boolean initialized = false;
-    public static final double MID_SERVO       = 0.5 ;
-    public static final double HAND_SPEED      = 0.02 ;
-    public static double ARM_UP_POWER    = 0.45 ;
-    public static double ARM_DOWN_POWER  = -0.45 ;
-    public static double OPENPOSITION    = 0.7 ;
-    public static double CLOSEPOSITION   = 1 ;
+    public static double OPENPOSITION    = 0.35 ;
+    public static double CLOSEPOSITION   = 0.55 ;
 
     public static int START_POSITION          = 20;
     public static int COLLECTION_POSITION     = 3800;
     public static int OVER_BARRIER_POSITION   = 3600;
+    public static int MAX_COLLECTION_WRIST    = 3000;
     public static int PUT_IN_BASKET_POSITION  = 2200;
     public static int PUT_ON_CHAMBER_POSITION = 2500;
     public static int ATTACH_TO_RUNG_POSITION = 4000;
@@ -38,7 +38,7 @@ public class Arm {
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.6;
     public static double BASKETANDCHAMBERWRIST   = 0.42;
-    public static final double MOVESPEED = 0.4;
+    public static double MOVESPEED = 0.4;
 
     public Arm (LinearOpMode opmode, Telemetry telemetry) {
         myOpMode = opmode;
@@ -83,18 +83,24 @@ public class Arm {
     }
 
     public void moveToStart(){
+        startWrist();
+        close_clawthingy();
         MoveArm(START_POSITION,MOVESPEED);
     }
     public void moveToCollection(){
+        collectionwrist();
         MoveArm(COLLECTION_POSITION,MOVESPEED);
     }
     public void moveToOverBarrier(){
+        collectionwrist();
         MoveArm(OVER_BARRIER_POSITION,MOVESPEED);
     }
     public void moveToBasket(){
+        basketandchamberwrist();
         MoveArm(PUT_IN_BASKET_POSITION,MOVESPEED);
     }
     public void moveToChamber(){
+        basketandchamberwrist();
         MoveArm(PUT_ON_CHAMBER_POSITION,MOVESPEED);
     }
     public void moveToClimb(){
