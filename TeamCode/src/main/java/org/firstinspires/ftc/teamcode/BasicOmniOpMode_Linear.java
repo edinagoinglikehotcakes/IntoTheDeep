@@ -78,7 +78,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-       robotchasis.init();
+        robotchasis.init();
         RobotArm.init();
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -105,26 +105,21 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
             if (gamepad1.start){
                 RobotArm.moveToStart();
-                RobotArm.startWrist();
-                //RobotArm.open_clawthingy();
             }
             if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
             }
             if (gamepad1.a) {
                 RobotArm.moveToCollection();
-                RobotArm.collectionwrist();
             }
             if (gamepad1.dpad_up) {
                 RobotArm.moveToClimb();
             }
             if (gamepad1.y) {
                 RobotArm.moveToChamber();
-                RobotArm.basketandchamberwrist();
             }
             if (gamepad1.x) {
                 RobotArm.moveToBasket();
-                RobotArm.basketandchamberwrist();
             }
             if (gamepad1.b) {
                 RobotArm.moveToOverBarrier();
@@ -135,24 +130,15 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             if (gamepad1.left_bumper) {
                 RobotArm.close_clawthingy();
             }
- /*           if (gamepad1.dpad_left) {
-                RobotArm.startWrist();
-            }
-            if (gamepad1.dpad_right) {
-                RobotArm.collectionwrist();
-            }
-            if (gamepad1.left_stick_button) {
-                RobotArm.basketandchamberwrist();
-            }
-*/
+            gamepad1.left_trigger
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
-            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+            //telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
 
-             */
+
             telemetry.update();
         }
     }

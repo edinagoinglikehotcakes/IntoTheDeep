@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.ServoController;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.ServoCommands;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Arm {
-    int remeber_Position;
+    int remember_Position;
     private LinearOpMode myOpMode = null;
     private Telemetry tel = null;
 
@@ -28,17 +24,18 @@ public class Arm {
 
     public static int START_POSITION          = 20;
     public static int COLLECTION_POSITION     = 3650;
-    public static int OVER_BARRIER_POSITION   = 3600;
+    public static int OVER_BARRIER_POSITION   = 3450;
     public static int MAX_COLLECTION_WRIST    = 3000;
     public static int PUT_IN_BASKET_POSITION  = 2200;
     public static int PUT_ON_CHAMBER_POSITION = 2500;
-    public static int ATTACH_TO_RUNG_POSITION = 4000;
-    public static int HANGING_POSITION        = 4500;
+    public static int READY_TO_RUNG_POSITION = 1775;
+    public static int ATTACH_TO_RUNG_POSITION = 2000;
+    public static int HANGING_POSITION        = 20;
 
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.575;
     public static double BASKETANDCHAMBERWRIST   = 0.42;
-    public static double MOVESPEED = 0.4;
+    public static double MOVESPEED = 0.6;
 
     public Arm (LinearOpMode opmode, Telemetry telemetry) {
         myOpMode = opmode;
@@ -63,7 +60,7 @@ public class Arm {
         claw.setPosition((CLOSEPOSITION));
     }
     public void MoveArm(int Position, double Speed) {
-       remeber_Position=Position;
+       remember_Position =Position;
        if (!initialized || true) {
             ArmMotor.setTargetPosition(Position);
             ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -104,6 +101,8 @@ public class Arm {
         MoveArm(PUT_ON_CHAMBER_POSITION,MOVESPEED);
     }
     public void moveToClimb(){
+        collectionwrist();
+        MoveArm(READY_TO_RUNG_POSITION,MOVESPEED);
         MoveArm(ATTACH_TO_RUNG_POSITION,MOVESPEED);
     }
 
