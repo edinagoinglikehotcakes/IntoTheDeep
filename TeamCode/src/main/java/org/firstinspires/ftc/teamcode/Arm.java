@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
@@ -51,6 +52,8 @@ public class Arm {
         ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     // do we need a speciman/sample pick up position?
     public void open_clawthingy(){
@@ -63,7 +66,6 @@ public class Arm {
        remember_Position =Position;
        if (!initialized || true) {
             ArmMotor.setTargetPosition(Position);
-            ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ArmMotor.setPower(Speed);
             initialized = true;
         }
