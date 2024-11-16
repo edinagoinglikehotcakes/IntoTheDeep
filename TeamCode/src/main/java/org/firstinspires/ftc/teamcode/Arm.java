@@ -104,7 +104,7 @@ public class Arm {
     }
     public void moveToClimb(){
         collectionwrist();
-        MoveArm(READY_TO_RUNG_POSITION,MOVESPEED);
+        //MoveArm(READY_TO_RUNG_POSITION,MOVESPEED);
         MoveArm(ATTACH_TO_RUNG_POSITION,MOVESPEED);
     }
 
