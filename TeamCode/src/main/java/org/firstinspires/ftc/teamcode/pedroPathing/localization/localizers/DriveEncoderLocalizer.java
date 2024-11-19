@@ -38,9 +38,9 @@ public class DriveEncoderLocalizer extends Localizer {
     private Encoder leftRear;
     private Encoder rightRear;
     private double totalHeading;
-    public static double FORWARD_TICKS_TO_INCHES = 1;
-    public static double STRAFE_TICKS_TO_INCHES = 1;
-    public static double TURN_TICKS_TO_RADIANS = 1;
+    public static double FORWARD_TICKS_TO_INCHES = 0.006;
+    public static double STRAFE_TICKS_TO_INCHES = 0.00681;
+    public static double TURN_TICKS_TO_RADIANS = 0.0009;
     public static double ROBOT_WIDTH = 1;
     public static double ROBOT_LENGTH = 1;
 
@@ -64,15 +64,15 @@ public class DriveEncoderLocalizer extends Localizer {
     public DriveEncoderLocalizer(HardwareMap map, Pose setStartPose) {
         hardwareMap = map;
 
-        leftFront = new Encoder(hardwareMap.get(DcMotorEx.class, leftFrontMotorName));
-        leftRear = new Encoder(hardwareMap.get(DcMotorEx.class, leftRearMotorName));
-        rightRear = new Encoder(hardwareMap.get(DcMotorEx.class, rightRearMotorName));
-        rightFront = new Encoder(hardwareMap.get(DcMotorEx.class, rightFrontMotorName));
+        leftFront = new Encoder(hardwareMap.get(DcMotorEx.class, "Frontleft"));
+        leftRear = new Encoder(hardwareMap.get(DcMotorEx.class, "Backleft"));
+        rightRear = new Encoder(hardwareMap.get(DcMotorEx.class, "Backright"));
+        rightFront = new Encoder(hardwareMap.get(DcMotorEx.class, "Frontright"));
 
         // TODO: reverse any encoders necessary
         leftFront.setDirection(Encoder.REVERSE);
-        rightRear.setDirection(Encoder.REVERSE);
-        leftRear.setDirection(Encoder.FORWARD);
+        rightRear.setDirection(Encoder.FORWARD);
+        leftRear.setDirection(Encoder.REVERSE);
         rightRear.setDirection(Encoder.FORWARD);
 
         setStartPose(setStartPose);

@@ -131,6 +131,13 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 RobotArm.close_clawthingy();
             }
 
+            telemetry.addData("triggers left/Right", "%4.2f, %4.2f",gamepad1.left_trigger, gamepad1.right_trigger);
+            if (gamepad1.left_trigger>0) {
+                RobotArm.scootchUp();
+            }
+            if (gamepad1.right_trigger>0) {
+                RobotArm.scootchDown();
+            }
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Arm position: " + RobotArm.getpos());

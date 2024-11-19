@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 @Autonomous(name = "Auto_Red_Basket", group = "Autonomous")
 
 public class Auto_Red_Basket extends OpMode {
-    private chasis robotchasis = new chasis(this);
+    //private chasis robotchasis = new chasis(this);
     private Arm RobotArm = new Arm(this, telemetry);
     private Follower follower;
     private PathChain path;
@@ -20,8 +21,9 @@ public class Auto_Red_Basket extends OpMode {
     @Override
     public void init() {
         RobotArm.init();
-        robotchasis.init();
+
         follower = new Follower(hardwareMap);
+        follower.setStartingPose(new Pose(135,54.5,180));
         path = follower.pathBuilder()
                 .addPath(
                         // Line 1
@@ -48,15 +50,15 @@ public class Auto_Red_Basket extends OpMode {
                 )
                 .setTangentHeadingInterpolation()
                 .build();
-        follower.followPath(path);
+        follower.followPath(path,true);
     }
 
     @Override
     public void loop() {
         follower.update();
         if (follower.atParametricEnd()) {
-            follower.followPath(path);
-
+            RobotArm.moveToBasket();
+            RobotArm.open_clawthingy();
         }
     }
 }

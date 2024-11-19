@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
@@ -14,16 +16,33 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 @Autonomous (name = "Auto_Red_Observation", group = "Autonomous")
 
 public class Auto_Red_Observation extends OpMode {
-    private chasis robotchasis = new chasis(this);
+    //private chasis robotchasis = new chasis(this);
     private Arm RobotArm = new Arm(this, telemetry);
     private Follower follower;
     private PathChain path;
 
+
     @Override
     public void init() {
         RobotArm.init();
-        robotchasis.init();
+
+
         follower = new Follower(hardwareMap);
+        follower.setStartingPose(new Pose(135,89.5,180));
+/*
+        path = follower.pathBuilder()
+                .addPath(
+                        // Line 1
+                        new BezierLine(
+                                new Point(0, 0, Point.CARTESIAN),
+                                new Point(24.0, 0, Point.CARTESIAN)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+                */
+
+
         path = follower.pathBuilder()
                 .addPath(
                         // Line 1
@@ -42,15 +61,16 @@ public class Auto_Red_Observation extends OpMode {
                 )
                 .setTangentHeadingInterpolation()
                 .build();
-        follower.followPath(path);
+
+
+        follower.followPath(path,true);
     }
 
     @Override
     public void loop() {
         follower.update();
         if (follower.atParametricEnd()) {
-            follower.followPath(path);
-
+            //do something after path
         }
     }
 }

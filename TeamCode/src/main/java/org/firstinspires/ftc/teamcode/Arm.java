@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class Arm {
     int remember_Position;
-    private LinearOpMode myOpMode = null;
+    private OpMode myOpMode = null;
     private Telemetry tel = null;
 
     private DcMotor ArmMotor = null;
@@ -24,7 +25,7 @@ public class Arm {
     public static double CLOSEPOSITION   = 0.55 ;
 
     public static int START_POSITION          = 20;
-    public static int COLLECTION_POSITION     = 3650;
+    public static int COLLECTION_POSITION     = 3775;
     public static int OVER_BARRIER_POSITION   = 3450;
     public static int MAX_COLLECTION_WRIST    = 3000;
     public static int PUT_IN_BASKET_POSITION  = 2200;
@@ -33,12 +34,15 @@ public class Arm {
     public static int ATTACH_TO_RUNG_POSITION = 2000;
     public static int HANGING_POSITION        = 20;
 
+    public static int SCOOTCH                 = 1;
+    public static int MAXARM                  = 4000;
+
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.575;
     public static double BASKETANDCHAMBERWRIST   = 0.42;
     public static double MOVESPEED = 0.6;
 
-    public Arm (LinearOpMode opmode, Telemetry telemetry) {
+    public Arm (OpMode opmode, Telemetry telemetry) {
         myOpMode = opmode;
         tel = telemetry;
     }
@@ -53,7 +57,7 @@ public class Arm {
 
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
     // do we need a speciman/sample pick up position?
     public void open_clawthingy(){
@@ -63,9 +67,10 @@ public class Arm {
         claw.setPosition((CLOSEPOSITION));
     }
     public void MoveArm(int Position, double Speed) {
-       remember_Position =Position;
-       if (!initialized || true) {
+       remember_Position = Position;
+       if (!initialized || true ) {
             ArmMotor.setTargetPosition(Position);
+            ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ArmMotor.setPower(Speed);
             initialized = true;
         }
@@ -111,6 +116,15 @@ public class Arm {
     public void moveToHang(){
         MoveArm(HANGING_POSITION,MOVESPEED);
     }
+    public void scootchUp(){
+        if (remember_Position < MAXARM)
+            MoveArm(remember_Position+SCOOTCH,MOVESPEED);
+    }
+    public void scootchDown(){
+        if (remember_Position > 0)
+            MoveArm(remember_Position-SCOOTCH,MOVESPEED);
+    }
+
     public void startWrist () {
         Wrist.setPosition((STARTWRIST));
     }

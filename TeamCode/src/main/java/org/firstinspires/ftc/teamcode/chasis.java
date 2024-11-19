@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class chasis {
 
-    private LinearOpMode myOpMode = null;
+    private OpMode myOpMode = null;
 
     private DcMotor LeftFrontDrive = null;
     private DcMotor RightFrontDrive = null;
@@ -16,7 +17,7 @@ public class chasis {
     private DcMotor RightBackDrive = null;
 
 
-     public chasis (LinearOpMode opmode) {
+     public chasis (OpMode opmode) {
          myOpMode = opmode;
      }
 
