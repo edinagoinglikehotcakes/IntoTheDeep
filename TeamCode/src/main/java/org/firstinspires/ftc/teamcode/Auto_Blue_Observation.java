@@ -23,22 +23,14 @@ public class Auto_Blue_Observation extends OpMode {
         RobotArm.init();
 
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(9,89.5,0));
+        follower.setStartingPose(new Pose(9,50,0));
 
         path = follower.pathBuilder()
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(8.972, 62.804, Point.CARTESIAN),
-                                new Point(23.327, 63.028, Point.CARTESIAN)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .addPath(
-                        // Line 2
-                        new BezierLine(
-                                new Point(23.327, 63.028, Point.CARTESIAN),
-                                new Point(10.318, 19.514, Point.CARTESIAN)
+                                new Point(9.000, 50.000, Point.CARTESIAN),
+                                new Point(8.494, 7.718, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()

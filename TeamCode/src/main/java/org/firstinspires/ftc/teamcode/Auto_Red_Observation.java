@@ -28,35 +28,16 @@ public class Auto_Red_Observation extends OpMode {
 
 
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(135,89.5,180));
-/*
-        path = follower.pathBuilder()
-                .addPath(
-                        // Line 1
-                        new BezierLine(
-                                new Point(0, 0, Point.CARTESIAN),
-                                new Point(24.0, 0, Point.CARTESIAN)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .build();
-                */
+        follower.setStartingPose(new Pose(135,88,180));
+
 
 
         path = follower.pathBuilder()
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(134.355, 84.336, Point.CARTESIAN),
-                                new Point(128.972, 84.336, Point.CARTESIAN)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .addPath(
-                        // Line 2
-                        new BezierLine(
-                                new Point(128.972, 84.336, Point.CARTESIAN),
-                                new Point(134.355, 126.953, Point.CARTESIAN)
+                                new Point(142.000, 88.000, Point.CARTESIAN),
+                                new Point(142.652, 129.715, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()

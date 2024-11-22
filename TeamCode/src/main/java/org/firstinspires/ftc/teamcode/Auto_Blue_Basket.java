@@ -33,24 +33,24 @@ public class Auto_Blue_Basket extends OpMode {
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(10.542, 109.458, Point.CARTESIAN),
-                                new Point(26.019, 109.458, Point.CARTESIAN)
+                                new Point(9.000, 89.500, Point.CARTESIAN),
+                                new Point(33.202, 89.371, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
                 .addPath(
                         // Line 2
                         new BezierLine(
-                                new Point(26.019, 109.458, Point.CARTESIAN),
-                                new Point(30.953, 115.065, Point.CARTESIAN)
+                                new Point(33.202, 89.371, Point.CARTESIAN),
+                                new Point(42.661, 109.061, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
                 .addPath(
                         // Line 3
                         new BezierLine(
-                                new Point(30.953, 115.065, Point.CARTESIAN),
-                                new Point(12.336, 131.215, Point.CARTESIAN)
+                                new Point(42.661, 109.061, Point.CARTESIAN),
+                                new Point(16.987, 126.241, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
