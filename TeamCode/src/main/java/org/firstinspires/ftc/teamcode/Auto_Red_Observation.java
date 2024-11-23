@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode;
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
@@ -13,13 +16,20 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 
 @Config
-@Autonomous (name = "Auto_Red_Observation", group = "Autonomous")
+@Autonomous (name = "Auto_Red_Observation", group = "Autonomous", preselectTeleOp = "Manual Driving")
 
 public class Auto_Red_Observation extends OpMode {
     //private chasis robotchasis = new chasis(this);
     private Arm RobotArm = new Arm(this, telemetry);
     private Follower follower;
     private PathChain path;
+//    private Telemetry telemetryA;
+
+    public static double STARTING_X = 135.0;
+    public static double STARTING_Y = 88.0;
+    public static double DISTANCE = 40.0;
+    public static double ENDING_Y = STARTING_Y+DISTANCE;
+    public static double HEADING = 180.0;
 
 
     @Override
@@ -28,7 +38,8 @@ public class Auto_Red_Observation extends OpMode {
 
 
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(135,88,180));
+        follower.setStartingPose(new Pose(STARTING_X,STARTING_Y,Math.toRadians(HEADING)));
+//        telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
 
@@ -36,11 +47,11 @@ public class Auto_Red_Observation extends OpMode {
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(142.000, 88.000, Point.CARTESIAN),
-                                new Point(142.652, 129.715, Point.CARTESIAN)
+                                new Point(STARTING_X, STARTING_Y, Point.CARTESIAN),
+                                new Point(STARTING_X, ENDING_Y, Point.CARTESIAN)
                         )
                 )
-                .setTangentHeadingInterpolation()
+                .setConstantHeadingInterpolation(Math.toRadians(HEADING))
                 .build();
 
 
@@ -53,6 +64,10 @@ public class Auto_Red_Observation extends OpMode {
         if (follower.atParametricEnd()) {
             //do something after path
         }
+
+/*        follower.telemetryDebug(telemetryA);
+        telemetryA.update();
+*/
     }
 }
 

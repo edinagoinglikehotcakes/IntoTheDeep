@@ -10,31 +10,44 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathBuilder;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 @Config
-@Autonomous(name = "Auto_Blue_Observation", group = "Autonomous")
+@Autonomous(name = "Auto_Blue_Observation", group = "Autonomous", preselectTeleOp = "Manual Driving")
 
 public class Auto_Blue_Observation extends OpMode {
     //private chasis robotchasis = new chasis(this);
     private Arm RobotArm = new Arm(this, telemetry);
     private Follower follower;
     private PathChain path;
+//    private Telemetry telemetryA;
+
+    public static double STARTING_X = 9.0;
+    public static double STARTING_Y = 57.0;
+    public static double DISTANCE = 40.0;
+    public static double ENDING_Y = STARTING_Y-DISTANCE;
+    public static double HEADING = 0.0;
 
     @Override
     public void init() {
         RobotArm.init();
 
+
         follower = new Follower(hardwareMap);
-        follower.setStartingPose(new Pose(9,50,0));
+        follower.setStartingPose(new Pose(STARTING_X,STARTING_Y,Math.toRadians(HEADING)));
+//        telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
+
 
         path = follower.pathBuilder()
                 .addPath(
                         // Line 1
                         new BezierLine(
-                                new Point(9.000, 50.000, Point.CARTESIAN),
-                                new Point(8.494, 7.718, Point.CARTESIAN)
+                                new Point(STARTING_X, STARTING_Y, Point.CARTESIAN),
+                                new Point(STARTING_X, ENDING_Y, Point.CARTESIAN)
                         )
                 )
-                .setTangentHeadingInterpolation()
+                .setConstantHeadingInterpolation(Math.toRadians(HEADING))
                 .build();
+
+
         follower.followPath(path,true);
     }
 
@@ -44,5 +57,9 @@ public class Auto_Blue_Observation extends OpMode {
         if (follower.atParametricEnd()) {
             //do something after path
         }
+
+/*        follower.telemetryDebug(telemetryA);
+        telemetryA.update();
+*/
     }
 }
