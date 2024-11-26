@@ -40,6 +40,7 @@ public class Arm {
 
     public static int SCOOTCH                 = 2;
     public static int MAXARM                  = 4000;
+    public static int MINARM                  = 0;
 
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.575;
@@ -60,7 +61,7 @@ public class Arm {
         ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     public void resetEncoders() {
