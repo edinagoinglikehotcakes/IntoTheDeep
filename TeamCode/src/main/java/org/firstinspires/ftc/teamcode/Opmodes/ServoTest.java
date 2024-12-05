@@ -1,9 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.robot.Arm;
+import org.firstinspires.ftc.teamcode.robot.Claw;
+import org.firstinspires.ftc.teamcode.robot.Wrist;
+import org.firstinspires.ftc.teamcode.robot.chasis;
 
 @TeleOp(name="ServoTest", group="Linear OpMode")
 @Config
@@ -21,15 +26,17 @@ public class ServoTest extends LinearOpMode {
         @Override
         public void runOpMode() {
 
-            robotchasis = new chasis(hardwareMap);
-            RobotArm = new Arm(hardwareMap);
-            RobotClaw = new Claw(hardwareMap);
-            RobotWrist = new Wrist(hardwareMap);
+            robotchasis = new chasis(this);
+            RobotArm = new Arm(this);
+            RobotClaw = new Claw(this);
+            RobotWrist = new Wrist(this);
 
             // Initialize the hardware variables. Note that the strings used here must correspond
             // to the names assigned during the robot configuration step on the DS or RC devices.
             robotchasis.init();
             RobotArm.init();
+            RobotWrist.init();
+            RobotClaw.init();
             // ########################################################################################
             // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
             // ########################################################################################
@@ -58,13 +65,8 @@ public class ServoTest extends LinearOpMode {
                     RobotClaw.setClawPosition(CLAWPOS);
 
                 }
-
-                telemetry.addData("Status", "Wrist: %f4.2 Claw: %f4.2", RobotWrist.getWristPosition(), RobotClaw.getClawPosition());
-            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-
-             */
+                RobotClaw.update();
+                RobotWrist.update();
                 telemetry.update();
 
             }

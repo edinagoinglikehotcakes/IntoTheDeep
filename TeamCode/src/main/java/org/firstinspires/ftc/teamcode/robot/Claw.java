@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robot;
 
 import androidx.annotation.NonNull;
 import androidx.core.math.MathUtils;
@@ -6,12 +6,16 @@ import androidx.core.math.MathUtils;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 
 public class Claw {
+    private OpMode opmode;
+
     private Servo clawServo = null;
     public static double OPENPOSITION    = 0.35 ;
     public static double CLOSEPOSITION   = 0.55 ;
@@ -21,15 +25,18 @@ public class Claw {
     private double remember_Position;
     private double ACCURACY = 0.05;
 
-    public Claw(HardwareMap hardwareMap){
-        clawServo = hardwareMap.get(Servo.class, "Claw_Servo");
+    public Claw(OpMode op){
+        opmode = op;
     }
 
     public void init(){
-
+        clawServo = opmode.hardwareMap.get(Servo.class, "Claw_Servo");
     }
     public void update(){
-
+        Telemetry telemetry = opmode.telemetry;
+        telemetry.addData("Claw position", getClawPosition());
+        telemetry.addData("Claw target", remember_Position);
+        telemetry.addData("Claw busy", isBusy());
     }
     public void open_clawthingy(){
         setClawPosition(OPENPOSITION);

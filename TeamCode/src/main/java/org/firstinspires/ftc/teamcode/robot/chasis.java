@@ -1,32 +1,19 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robot;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class chasis {
-
+    OpMode opmode;
     private DcMotor LeftFrontDrive = null;
     private DcMotor RightFrontDrive = null;
     private DcMotor LeftBackDrive = null;
     private DcMotor RightBackDrive = null;
 
 
-     public chasis (HardwareMap hardwareMap) {
-         LeftFrontDrive = hardwareMap.get(DcMotor.class, "Frontleft");
-         LeftBackDrive = hardwareMap.get(DcMotor.class, "Backleft");
-         RightFrontDrive = hardwareMap.get(DcMotor.class, "Frontright");
-         RightBackDrive = hardwareMap.get(DcMotor.class, "Backright");
-
-
-         LeftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-         LeftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-         RightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-         RightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
+     public chasis (OpMode op) {
+         opmode = op;
      }
 
 
@@ -34,6 +21,16 @@ public class chasis {
 
 
     public void init() {
+        LeftFrontDrive = opmode.hardwareMap.get(DcMotor.class, "Frontleft");
+        LeftBackDrive = opmode.hardwareMap.get(DcMotor.class, "Backleft");
+        RightFrontDrive = opmode.hardwareMap.get(DcMotor.class, "Frontright");
+        RightBackDrive = opmode.hardwareMap.get(DcMotor.class, "Backright");
+
+
+        LeftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        LeftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        RightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        RightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
     }
 

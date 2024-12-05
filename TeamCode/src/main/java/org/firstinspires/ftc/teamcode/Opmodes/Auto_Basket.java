@@ -1,16 +1,19 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.teamcode.robot.Arm;
+import org.firstinspires.ftc.teamcode.robot.Claw;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.robot.Wrist;
 
 
 @Config
@@ -88,9 +91,9 @@ public class Auto_Basket extends LinearOpMode {
     public void runOpMode() {
         drive = new MecanumDrive(hardwareMap, STARTING_POSE_BASKET);
 
-        RobotArm = new Arm(hardwareMap);
-        RobotClaw = new Claw(hardwareMap);
-        RobotWrist = new Wrist(hardwareMap);
+        RobotArm = new Arm(this);
+        RobotClaw = new Claw(this);
+        RobotWrist = new Wrist(this);
 
         RobotArm.init();
         RobotClaw.init();

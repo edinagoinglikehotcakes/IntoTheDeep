@@ -1,30 +1,25 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robot;
 
-import android.icu.math.MathContext;
-import android.icu.number.Precision;
 
 import androidx.annotation.NonNull;
 import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.PIDController;
 
-import kotlin.math.MathKt;
 
 @Config
 public class Arm {
-    int remember_Position;
+
+    private OpMode opmode;
+    private int remember_Position;
 
     private DcMotor ArmMotor = null;
 
@@ -58,11 +53,13 @@ public class Arm {
 
     public static double MOVESPEED = 0.6;
 
-    public Arm (HardwareMap hardwareMap) {
-        ArmMotor = hardwareMap.get(DcMotor.class, "ArmMotor");
+    public Arm (OpMode op) {
+        opmode = op;
     }
 
     public void init() {
+        ArmMotor = opmode.hardwareMap.get(DcMotor.class, "ArmMotor");
+
         realCollectionPosition = COLLECTION_POSITION;
 
         ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -82,6 +79,12 @@ public class Arm {
         if (power < -1.0) power = -1.0;
 
         ArmMotor.setPower(power);
+
+        Telemetry telemetry = opmode.telemetry;
+        telemetry.addData("Arm power",power);
+        telemetry.addData("Arm position", getPos());
+        telemetry.addData("Arm target", remember_Position);
+        telemetry.addData("Arm busy", isBusy());
     }
 
 
@@ -96,14 +99,14 @@ public class Arm {
 
 
 
-    public int getpos(){
+    public int getPos(){
         return ArmMotor.getCurrentPosition();
     }
 
     private double getAngle(int pos){
         return pos/TICKS_PER_DEGREE - INITIAL_ANGLE;
     }
-    private int getPos(double angle){
+    private int getPosValue(double angle){
         return (int) ((angle+INITIAL_ANGLE)*TICKS_PER_DEGREE);
     }
 
@@ -111,7 +114,7 @@ public class Arm {
         remember_Position = MathUtils.clamp(position, MINARM, MAXARM);
     }
     public void moveDegress(double deg){
-        movePos(getPos(deg));
+        movePos(getPosValue(deg));
     }
 
     public void moveToStart(){
@@ -148,9 +151,10 @@ public class Arm {
     }
 
     public boolean isBusy(){
-        if (Math.abs(getpos()-remember_Position) <= ACCURACY) return false;
+        if (Math.abs(getPos()-remember_Position) <= ACCURACY) return false;
         return true;
     }
+
 
     public class ArmAction implements Action {
         private boolean initialized = false;
@@ -166,7 +170,7 @@ public class Arm {
                 movePos(auto_remember_position);
                 initialized = true;
             }
-            telemetryPacket.put("Arm Pos", getpos());
+            telemetryPacket.put("Arm Pos", getPos());
             telemetryPacket.put("Target", auto_remember_position);
             return isBusy();
         }

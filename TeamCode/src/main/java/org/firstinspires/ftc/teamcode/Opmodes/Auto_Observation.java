@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -7,10 +7,14 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.robot.Arm;
+import org.firstinspires.ftc.teamcode.robot.Claw;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.robot.Wrist;
 
 @Disabled
 @Config
@@ -164,9 +168,9 @@ public class Auto_Observation extends LinearOpMode {
     public void runOpMode() {
         drive = new MecanumDrive(hardwareMap, STARTING_POSE_SPECIMEN);
 
-        RobotArm = new Arm(hardwareMap);
-        RobotClaw = new Claw(hardwareMap);
-        RobotWrist = new Wrist(hardwareMap);
+        RobotArm = new Arm(this);
+        RobotClaw = new Claw(this);
+        RobotWrist = new Wrist(this);
 
         RobotArm.init();
         RobotClaw.init();

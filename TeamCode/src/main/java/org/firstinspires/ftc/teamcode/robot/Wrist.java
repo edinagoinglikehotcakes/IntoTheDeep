@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.robot;
 
 import androidx.annotation.NonNull;
 import androidx.core.math.MathUtils;
@@ -6,11 +6,15 @@ import androidx.core.math.MathUtils;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Wrist {
+    private OpMode opmode;
+
     private Servo wristServo = null;
     public static double STARTWRIST              = 0;
     public static double COLLECTIONWRIST         = 0.575;
@@ -22,13 +26,18 @@ public class Wrist {
     private double remember_Position;
     private double ACCURACY = 0.05;
 
-    public Wrist(HardwareMap hardwareMap){
-        wristServo = hardwareMap.get(Servo.class, "Wrist_Servo");
+    public Wrist(OpMode op){
+        opmode = op;
     }
     public void init() {
+        wristServo = opmode.hardwareMap.get(Servo.class, "Wrist_Servo");
     }
 
     public void update(){
+        Telemetry telemetry = opmode.telemetry;
+        telemetry.addData("Wrist position", getWristPosition());
+        telemetry.addData("Wrist target", remember_Position);
+        telemetry.addData("Wrist busy", isBusy());
     }
 
     public void startWrist () {

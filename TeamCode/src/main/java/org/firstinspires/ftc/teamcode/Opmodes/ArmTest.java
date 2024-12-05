@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.robot.Arm;
+import org.firstinspires.ftc.teamcode.robot.Claw;
+import org.firstinspires.ftc.teamcode.robot.Wrist;
 
 @Autonomous(name="Arm Reset", group = "Autonomous Pathing Tuning")
 
@@ -20,9 +22,9 @@ public class ArmTest extends OpMode {
 
     @Override
     public void init() {
-        RobotArm = new Arm(hardwareMap);
-        RobotClaw = new Claw(hardwareMap);
-        RobotWrist = new Wrist(hardwareMap);
+        RobotArm = new Arm(this);
+        RobotClaw = new Claw(this);
+        RobotWrist = new Wrist(this);
         RobotArm.init();
         RobotWrist.init();
         RobotClaw.init();
@@ -76,7 +78,7 @@ public class ArmTest extends OpMode {
         RobotClaw.setClawPosition(clawPosition);
         RobotWrist.setWristPosition(wristPosition);
         telemetry.addData("Gamepad", gamepad1);
-        telemetry.addData("Arm position",RobotArm.getpos());
+        telemetry.addData("Arm position",RobotArm.getPos());
         telemetry.addData("Wrist Position", RobotWrist.getWristPosition());
         telemetry.addData("Claw position", RobotClaw.getClawPosition());
     }

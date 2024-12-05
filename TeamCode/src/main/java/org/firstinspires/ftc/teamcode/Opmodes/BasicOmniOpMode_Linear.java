@@ -27,15 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Opmodes;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.robot.Arm;
+import org.firstinspires.ftc.teamcode.robot.Claw;
+import org.firstinspires.ftc.teamcode.robot.Wrist;
+import org.firstinspires.ftc.teamcode.robot.chasis;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -96,10 +97,10 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
 
         // Wait for the game to start (driver presses START)
-        robotchasis = new chasis(hardwareMap);
-        RobotArm = new Arm(hardwareMap);
-        RobotClaw = new Claw(hardwareMap);
-        RobotWrist = new Wrist(hardwareMap);
+        robotchasis = new chasis(this);
+        RobotArm = new Arm(this);
+        RobotClaw = new Claw(this);
+        RobotWrist = new Wrist(this);
 
         robotchasis.init();
         RobotArm.init();
@@ -115,8 +116,6 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
-            RobotArm.update();
-
             if (gamepad1.start){
                 RobotWrist.startWrist();
                 RobotClaw.close_clawthingy();
@@ -152,7 +151,6 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 RobotClaw.close_clawthingy();
             }
 
-            telemetry.addData("triggers left/Right", "%4.2f, %4.2f",gamepad1.left_trigger, gamepad1.right_trigger);
             if (gamepad1.left_trigger>0) {
                 RobotArm.scootchUp();
             }
@@ -163,12 +161,10 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 RobotArm.setRealCollectionPosition();
             }
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Arm position: " + RobotArm.getpos());
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            //telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-
+            telemetry.addData("Gamepad", gamepad1);
+            RobotArm.update();
+            RobotWrist.update();
+            RobotClaw.update();
 
             telemetry.update();
         }
