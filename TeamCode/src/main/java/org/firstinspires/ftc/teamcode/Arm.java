@@ -1,30 +1,42 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.icu.math.MathContext;
+import android.icu.number.Precision;
+
+import androidx.annotation.NonNull;
+import androidx.core.math.MathUtils;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import kotlin.math.MathKt;
+
 @Config
 public class Arm {
     int remember_Position;
-    private OpMode myOpMode = null;
-    private Telemetry tel = null;
 
     private DcMotor ArmMotor = null;
-    private Servo claw = null;
-    private Servo   Wrist = null;
+
+    private PIDController controller;
+    public static double p = 0.005, i = 0.000001, d = 0.0001, f = 0.05;
+
+    private final double TICKS_PER_DEGREE = 640 / 45.0;
+    private final double INITIAL_ANGLE = 45.0;
 
     private int realCollectionPosition;
 
     private boolean initialized = false;
-    public static double OPENPOSITION    = 0.35 ;
-    public static double CLOSEPOSITION   = 0.55 ;
 
     public static int START_POSITION          = 20;
     public static int COLLECTION_POSITION     = 3960;
@@ -42,123 +54,126 @@ public class Arm {
     public static int MAXARM                  = 4000;
     public static int MINARM                  = 0;
 
-    public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 0.575;
-    public static double BASKETANDCHAMBERWRIST   = 0.42;
+    public static int ACCURACY                = 10;
+
     public static double MOVESPEED = 0.6;
 
-    public Arm (OpMode opmode, Telemetry telemetry) {
-        myOpMode = opmode;
-        tel = telemetry;
+    public Arm (HardwareMap hardwareMap) {
+        ArmMotor = hardwareMap.get(DcMotor.class, "ArmMotor");
     }
 
     public void init() {
         realCollectionPosition = COLLECTION_POSITION;
-        ArmMotor = myOpMode.hardwareMap.get(DcMotor.class, "ArmMotor");
-        Wrist = myOpMode.hardwareMap.get(Servo.class, "Wrist_Servo");
-        claw = myOpMode.hardwareMap.get(Servo.class, "Claw_Servo");
 
-        ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        controller = new PIDController(p, i, d);
 
     }
+
+    public void update() {
+        controller.setPID(p, i, d);
+        int currentPos = ArmMotor.getCurrentPosition();
+        double pidf = controller.calculate(currentPos, remember_Position);
+        double ff = Math.cos(Math.toRadians(getAngle(remember_Position)))*f;
+        double power = pidf+ff;
+        if (power > 1.0) power = 1.0;
+        if (power < -1.0) power = -1.0;
+
+        ArmMotor.setPower(power);
+    }
+
+
     public void resetEncoders() {
         ArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
     public void setRealCollectionPosition()
     {
-        realCollectionPosition= ArmMotor.getCurrentPosition();
+        realCollectionPosition = ArmMotor.getCurrentPosition();
     }
-    // do we need a speciman/sample pick up position?
-    public void open_clawthingy(){
-        claw.setPosition(OPENPOSITION);
-    }
-    public void close_clawthingy(){
-        claw.setPosition((CLOSEPOSITION));
-    }
-    public void MoveArm(int Position, double Speed) {
-       remember_Position = Position;
-       if (!initialized || true ) {
-            ArmMotor.setTargetPosition(Position);
-            ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ArmMotor.setPower(Speed);
-            initialized = true;
-        }
 
-       tel.addData("target current", "%d %d", Position , ArmMotor.getCurrentPosition());
-       if (ArmMotor.getCurrentPosition()== Position) {
-            ArmMotor.setPower(0);
-            initialized = false;
-            return;
-        }
-    }
+
+
     public int getpos(){
         return ArmMotor.getCurrentPosition();
     }
 
+    private double getAngle(int pos){
+        return pos/TICKS_PER_DEGREE - INITIAL_ANGLE;
+    }
+    private int getPos(double angle){
+        return (int) ((angle+INITIAL_ANGLE)*TICKS_PER_DEGREE);
+    }
+
+    public void movePos(int position){
+        remember_Position = MathUtils.clamp(position, MINARM, MAXARM);
+    }
+    public void moveDegress(double deg){
+        movePos(getPos(deg));
+    }
+
     public void moveToStart(){
-        startWrist();
-        close_clawthingy();
-        MoveArm(START_POSITION,MOVESPEED);
+        movePos( START_POSITION);
     }
     public void moveToCollection(){
-        collectionwrist();
-        MoveArm(realCollectionPosition,MOVESPEED);
+
+        movePos(realCollectionPosition);
     }
     public void moveToOverBarrier(){
-        collectionwrist();
-        MoveArm(OVER_BARRIER_POSITION,MOVESPEED);
+        movePos(OVER_BARRIER_POSITION);
     }
     public void moveToAutonomousBasket(){
-        basketandchamberwrist();
-        MoveArm(AUTO_PUT_IN_BASKET_POSITION,MOVESPEED);
+        movePos(AUTO_PUT_IN_BASKET_POSITION);
     }
     public void moveToBasket(){
-        basketandchamberwrist();
-        MoveArm(PUT_IN_BASKET_POSITION,MOVESPEED);
+        movePos(PUT_IN_BASKET_POSITION);
     }
     public void moveToChamber(){
-        basketandchamberwrist();
-        MoveArm(PUT_ON_CHAMBER_POSITION,MOVESPEED);
+        movePos(PUT_ON_CHAMBER_POSITION);
     }
     public void moveToClimb(){
-        startWrist();
-        //MoveArm(READY_TO_RUNG_POSITION,MOVESPEED);
-        MoveArm(ATTACH_TO_RUNG_POSITION,MOVESPEED);
+        movePos(ATTACH_TO_RUNG_POSITION);
     }
 
     public void moveToHang(){
-        MoveArm(HANGING_POSITION,MOVESPEED);
+        movePos(HANGING_POSITION);
     }
     public void scootchUp(){
-        if (remember_Position < MAXARM)
-            MoveArm(remember_Position+SCOOTCH,MOVESPEED);
+        movePos(remember_Position + SCOOTCH);
     }
     public void scootchDown(){
-        if (remember_Position > 0)
-            MoveArm(remember_Position-SCOOTCH,MOVESPEED);
+        movePos(remember_Position - SCOOTCH);
     }
 
-    public void startWrist () {
-        Wrist.setPosition((STARTWRIST));
-    }
-    public void collectionwrist () {
-        Wrist.setPosition((COLLECTIONWRIST));
-    }
-    public void basketandchamberwrist (){
-        Wrist.setPosition((BASKETANDCHAMBERWRIST));
+    public boolean isBusy(){
+        if (Math.abs(getpos()-remember_Position) <= ACCURACY) return false;
+        return true;
     }
 
-    public void setWristPosition(double pos) {
-        Wrist.setPosition(pos);
+    public class ArmAction implements Action {
+        private boolean initialized = false;
+        private int auto_remember_position;
+
+        public ArmAction(int position)
+        {
+            auto_remember_position = position;
+        }
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized) {
+                movePos(auto_remember_position);
+                initialized = true;
+            }
+            telemetryPacket.put("Arm Pos", getpos());
+            telemetryPacket.put("Target", auto_remember_position);
+            return isBusy();
+        }
     }
-    public void setClawPosition(double pos) {
-        claw.setPosition(pos);
+    public Action armAction(int pos){
+        return new ArmAction(pos);
     }
-    public double getWristPosition() {return Wrist.getPosition();}
-    public double getClawPosition() {return claw.getPosition();}
 }
 /*yay.java EXISTS ONCE MORE!!!!
 AND BOB ISNT LONLEY*/

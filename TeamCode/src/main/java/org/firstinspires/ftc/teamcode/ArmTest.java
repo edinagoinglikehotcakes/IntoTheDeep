@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Arm Testing", group = "Autonomous Pathing Tuning")
+@Autonomous(name="Arm Reset", group = "Autonomous Pathing Tuning")
 
 public class ArmTest extends OpMode {
-    private Arm RobotArm = new Arm( this, telemetry);
-    private int armPosition;
+    private Arm RobotArm;
+    private Wrist RobotWrist;
+    private Claw RobotClaw;    private int armPosition;
     private double clawPosition;
     private double wristPosition;
 
@@ -18,8 +20,13 @@ public class ArmTest extends OpMode {
 
     @Override
     public void init() {
+        RobotArm = new Arm(hardwareMap);
+        RobotClaw = new Claw(hardwareMap);
+        RobotWrist = new Wrist(hardwareMap);
         RobotArm.init();
-        RobotArm.close_clawthingy();
+        RobotWrist.init();
+        RobotClaw.init();
+        RobotClaw.close_clawthingy();
         armPosition = 0;
         clawPosition = 0.0;
         wristPosition = 0.0;
@@ -65,12 +72,12 @@ public class ArmTest extends OpMode {
         if (gamepad1.dpad_down) {
             wristPosition = clampServo(wristPosition-SERVO_INC);
         }
-        RobotArm.MoveArm(armPosition,Arm.MOVESPEED);
-        RobotArm.setClawPosition(clawPosition);
-        RobotArm.setWristPosition(wristPosition);
+        RobotArm.movePos(armPosition);
+        RobotClaw.setClawPosition(clawPosition);
+        RobotWrist.setWristPosition(wristPosition);
         telemetry.addData("Gamepad", gamepad1);
         telemetry.addData("Arm position",RobotArm.getpos());
-        telemetry.addData("Wrist Position", RobotArm.getWristPosition());
-        telemetry.addData("Claw position", RobotArm.getClawPosition());
+        telemetry.addData("Wrist Position", RobotWrist.getWristPosition());
+        telemetry.addData("Claw position", RobotClaw.getClawPosition());
     }
 }

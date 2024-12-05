@@ -10,14 +10,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ServoTest extends LinearOpMode {
      // Declare OpMode members for each of the 4 motors.
         private ElapsedTime runtime = new ElapsedTime();
-        private chasis robotchasis = new chasis(this);
-        private Arm RobotArm = new Arm(this, telemetry);
+        private chasis robotchasis;
+        private Arm RobotArm;
+        private Wrist RobotWrist;
+        private Claw RobotClaw;
 
         public static double WRISTPOS = 0.1;
         public static double CLAWPOS = 0.1;
 
         @Override
         public void runOpMode() {
+
+            robotchasis = new chasis(hardwareMap);
+            RobotArm = new Arm(hardwareMap);
+            RobotClaw = new Claw(hardwareMap);
+            RobotWrist = new Wrist(hardwareMap);
 
             // Initialize the hardware variables. Note that the strings used here must correspond
             // to the names assigned during the robot configuration step on the DS or RC devices.
@@ -46,13 +53,13 @@ public class ServoTest extends LinearOpMode {
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
                 if (gamepad1.a) {
-                    RobotArm.setWristPosition(WRISTPOS);
+                    RobotWrist.setWristPosition(WRISTPOS);
                 } else if (gamepad1.b) {
-                    RobotArm.setClawPosition(CLAWPOS);
+                    RobotClaw.setClawPosition(CLAWPOS);
 
                 }
 
-                telemetry.addData("Status", "Wrist: %f4.2 Claw: %f4.2", RobotArm.getWristPosition(), RobotArm.getClawPosition());
+                telemetry.addData("Status", "Wrist: %f4.2 Claw: %f4.2", RobotWrist.getWristPosition(), RobotClaw.getClawPosition());
             /*telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Frnt left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  leoft/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);

@@ -9,16 +9,24 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class chasis {
 
-    private OpMode myOpMode = null;
-
     private DcMotor LeftFrontDrive = null;
     private DcMotor RightFrontDrive = null;
     private DcMotor LeftBackDrive = null;
     private DcMotor RightBackDrive = null;
 
 
-     public chasis (OpMode opmode) {
-         myOpMode = opmode;
+     public chasis (HardwareMap hardwareMap) {
+         LeftFrontDrive = hardwareMap.get(DcMotor.class, "Frontleft");
+         LeftBackDrive = hardwareMap.get(DcMotor.class, "Backleft");
+         RightFrontDrive = hardwareMap.get(DcMotor.class, "Frontright");
+         RightBackDrive = hardwareMap.get(DcMotor.class, "Backright");
+
+
+         LeftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+         LeftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+         RightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+         RightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
      }
 
 
@@ -27,16 +35,6 @@ public class chasis {
 
     public void init() {
 
-        LeftFrontDrive = myOpMode.hardwareMap.get(DcMotor.class, "Frontleft");
-        LeftBackDrive = myOpMode.hardwareMap.get(DcMotor.class, "Backleft");
-        RightFrontDrive = myOpMode.hardwareMap.get(DcMotor.class, "Frontright");
-        RightBackDrive = myOpMode.hardwareMap.get(DcMotor.class, "Backright");
-        
-
-        LeftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        LeftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        RightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        RightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
 
     public void resetstart(){

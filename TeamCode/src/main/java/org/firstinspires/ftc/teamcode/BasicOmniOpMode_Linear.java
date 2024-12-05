@@ -71,15 +71,18 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private chasis robotchasis = new chasis(this);
-    private Arm RobotArm = new Arm( this, telemetry);
+    private chasis robotchasis;
+    private Arm RobotArm;
+    private Wrist RobotWrist;
+    private Claw RobotClaw;
+
+
     @Override
     public void runOpMode() {
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        robotchasis.init();
-        RobotArm.init();
+
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -93,6 +96,15 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
 
 
         // Wait for the game to start (driver presses START)
+        robotchasis = new chasis(hardwareMap);
+        RobotArm = new Arm(hardwareMap);
+        RobotClaw = new Claw(hardwareMap);
+        RobotWrist = new Wrist(hardwareMap);
+
+        robotchasis.init();
+        RobotArm.init();
+        RobotClaw.init();
+        RobotWrist.init();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -103,32 +115,41 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             robotchasis.drive(-gamepad1.left_stick_y,gamepad1.left_stick_x,gamepad1.right_stick_x);
+            RobotArm.update();
+
             if (gamepad1.start){
+                RobotWrist.startWrist();
+                RobotClaw.close_clawthingy();
                 RobotArm.moveToStart();
             }
             if (gamepad1.dpad_down) {
                 RobotArm.moveToHang();
             }
             if (gamepad1.a) {
+                RobotWrist.collectionwrist();
                 RobotArm.moveToCollection();
             }
             if (gamepad1.dpad_up) {
+                RobotWrist.startWrist();
                 RobotArm.moveToClimb();
             }
             if (gamepad1.y) {
+                RobotWrist.basketandchamberwrist();
                 RobotArm.moveToChamber();
             }
             if (gamepad1.x) {
+                RobotWrist.basketandchamberwrist();
                 RobotArm.moveToBasket();
             }
             if (gamepad1.b) {
+                RobotWrist.collectionwrist();
                 RobotArm.moveToOverBarrier();
             }
             if (gamepad1.right_bumper) {
-                RobotArm.open_clawthingy();
+                RobotClaw.open_clawthingy();
             }
             if (gamepad1.left_bumper) {
-                RobotArm.close_clawthingy();
+                RobotClaw.close_clawthingy();
             }
 
             telemetry.addData("triggers left/Right", "%4.2f, %4.2f",gamepad1.left_trigger, gamepad1.right_trigger);
