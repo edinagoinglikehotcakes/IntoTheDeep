@@ -36,7 +36,7 @@ public class Auto_Basket extends LinearOpMode {
     public static Pose2d STARTING_POSE_BASKET = new Pose2d(16.5, 63.0, Math.toRadians(BASKET_START_HEADING));
 
     //samples
-    public static double SAMPLE_Y = 25.0+24.0-7.5;
+    public static double SAMPLE_Y = 25.0+24.0-6.5;
     public static double SAMPLE_MOVE = 16.5;
 
 
@@ -45,7 +45,7 @@ public class Auto_Basket extends LinearOpMode {
     public static double YELLOW_SAMPLE_HEADING = 315.0;
 
     //Basket locations
-    public static Vector2d BASKET = new Vector2d(69-10,69-28);
+    public static Vector2d BASKET = new Vector2d(69-10-2.5,69-28-3);
     public static double BASKET_HEADING = 45.0;
 
     public static double SAFEY = 45.0;
@@ -103,6 +103,7 @@ public class Auto_Basket extends LinearOpMode {
     }
     private Action buildBasket(MecanumDrive drive){
         return new SequentialAction(
+                RobotClaw.clawAction(Claw.CLOSEPOSITION),
                 //go to Chamber with hand specimen and move in
                 dropInBasket(
                         drive.actionBuilder(STARTING_POSE_BASKET)
