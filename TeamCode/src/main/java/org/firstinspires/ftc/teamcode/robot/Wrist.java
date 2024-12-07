@@ -16,10 +16,12 @@ public class Wrist {
     private OpMode opmode;
 
     private Servo wristServo = null;
+    private double realCollectionPosition;
+
     public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 0.575;
+    public static double COLLECTIONWRIST         = 0.56;
     public static double BASKETANDCHAMBERWRIST   = 0.42;
-    public static double SCOOTCH                 = .025;
+    public static double SCOOTCH                 = .0125;
     private static double MINWRIST               = 0;
     private static double MAXWRIST               = 0.8;
 
@@ -31,6 +33,8 @@ public class Wrist {
     }
     public void init() {
         wristServo = opmode.hardwareMap.get(Servo.class, "Wrist_Servo");
+        realCollectionPosition = COLLECTIONWRIST;
+
     }
 
     public void update(){
@@ -38,6 +42,11 @@ public class Wrist {
         telemetry.addData("Wrist position", getWristPosition());
         telemetry.addData("Wrist target", remember_Position);
         telemetry.addData("Wrist busy", isBusy());
+    }
+
+    public void setRealCollectionPosition()
+    {
+        realCollectionPosition = getWristPosition();
     }
 
     public void startWrist () {

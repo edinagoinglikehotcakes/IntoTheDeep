@@ -8,8 +8,11 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.robot.Arm;
 import org.firstinspires.ftc.teamcode.robot.Claw;
@@ -26,9 +29,29 @@ public class Auto_Specimen extends LinearOpMode {
 
     MecanumDrive drive;
     Action move;
+    public static int WALL_ARM = 3970;
+    public static double WALL_WRIST = 0.8;
+    public static int LIFT_ARM = 3900;
+    public static double BACKOFF = 3.0;
 
     public static Pose2d STARTING_POSE = new Pose2d(-16.5, 63.0, Math.toRadians(90.0));
 
+    private Action pickupFromWall(){
+        return new SequentialAction(
+                new ParallelAction(
+                        RobotArm.armAction(WALL_ARM),
+                        RobotWrist.wristAction(WALL_WRIST),
+                        RobotClaw.clawAction(Claw.OPENPOSITION)
+                ),
+                new SleepAction(3.0),
+                RobotClaw.clawAction(Claw.CLOSEPOSITION),
+
+                new ParallelAction(
+                        RobotArm.armAction(LIFT_ARM),
+                        drive.actionBuilder(drive.pose).strafeTo(drive.pose.position.minus(new Vector2d(0,-BACKOFF))).build()
+                )
+        );
+    }
 
     @Override
     public void runOpMode() {
@@ -44,13 +67,8 @@ public class Auto_Specimen extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        move = new SequentialAction(
-                new ParallelAction(
-                    RobotArm.armAction(Arm.PUT_ON_CHAMBER_POSITION),
-                    RobotWrist.wristAction(Wrist.BASKETANDCHAMBERWRIST)
-                ),
-                RobotClaw.clawAction(Claw.OPENPOSITION)
-        );
+
+        move = pickupFromWall();
 
         waitForStart();
 

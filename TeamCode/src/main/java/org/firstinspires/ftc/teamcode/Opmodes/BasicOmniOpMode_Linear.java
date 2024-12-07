@@ -132,6 +132,12 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
                 RobotWrist.startWrist();
                 RobotArm.moveToClimb();
             }
+            if (gamepad1.dpad_left){
+                RobotWrist.scootchDown();
+            }
+            if (gamepad1.dpad_right){
+                RobotWrist.scootchUp();
+            }
             if (gamepad1.y) {
                 RobotWrist.basketandchamberwrist();
                 RobotArm.moveToChamber();
@@ -159,6 +165,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
             }
             if (gamepad1.back){
                 RobotArm.setRealCollectionPosition();
+                RobotWrist.setRealCollectionPosition();
             }
 
             telemetry.addData("Gamepad", gamepad1);

@@ -4,8 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -51,7 +53,8 @@ public class Auto_Observation extends LinearOpMode {
     public static double CHAMBER_MOVE = 3;
     public static Vector2d CHAMBER = new Vector2d(-11,CHAMBER_Y);
 
-
+    public static double CLAW_CLOSE_WAIT = 0.5;
+    public static double CLAW_OPEN_WAIT = 0.5;
     public static double HOOK_DISTANCE = 3.0;
 
     private static Vector2d getChamberPosition(int whichvisit) {
@@ -64,8 +67,18 @@ public class Auto_Observation extends LinearOpMode {
     private static Vector2d getTeamSamplePosition(int whichvisit){
         return TEAM_FLOOR_SAMPLE.minus(new Vector2d(SAMPLE_MOVE*(whichvisit-1),0));
     }
+    private Action grabSampleFromFloor(){
+        return new SequentialAction(
+                new ParallelAction(
+                        RobotWrist.wristAction(Wrist.COLLECTIONWRIST),
+                        RobotArm.armAction(Arm.COLLECTION_POSITION)
+                ),
+                RobotClaw.clawAction(Claw.CLOSEPOSITION),
+                new SleepAction(CLAW_CLOSE_WAIT)
+        );
+    }
 
-    private static Action buildSpecimens(MecanumDrive drive){
+    private Action buildSpecimens(MecanumDrive drive){
         return new SequentialAction(
                 //go to Chamber with hand specimen and move in
                 drive.actionBuilder(STARTING_POSE_SPECIMEN)
@@ -82,7 +95,7 @@ public class Auto_Observation extends LinearOpMode {
                 drive.actionBuilder(new Pose2d(getChamberPosition(1),Math.toRadians(CHAMBER_HEADING)))
                         .strafeToLinearHeading(getTeamSamplePosition(1),Math.toRadians(TEAM_SAMPLE_HEADING))
                         .build(),
-                //TODO grab sample 1
+                grabSampleFromFloor(),
 
                 // hand to human
                 drive.actionBuilder(new Pose2d(getTeamSamplePosition(1), Math.toRadians(TEAM_SAMPLE_HEADING)))
@@ -94,7 +107,7 @@ public class Auto_Observation extends LinearOpMode {
                 drive.actionBuilder(new Pose2d(OBSERVATION,Math.toRadians(OBSERVATION_HEADING)))
                         .strafeToLinearHeading(getTeamSamplePosition(2), Math.toRadians(TEAM_SAMPLE_HEADING))
                         .build(),
-                //TODO grab sample 2
+                grabSampleFromFloor(),
 
                 // hand to human
                 drive.actionBuilder(new Pose2d(getTeamSamplePosition(2), Math.toRadians(TEAM_SAMPLE_HEADING)))
@@ -120,7 +133,7 @@ public class Auto_Observation extends LinearOpMode {
                 drive.actionBuilder(new Pose2d(getChamberPosition(2),Math.toRadians(CHAMBER_HEADING)))
                         .strafeToLinearHeading(getTeamSamplePosition(3), Math.toRadians(TEAM_SAMPLE_HEADING))
                         .build(),
-                //TODO grab sample 3
+                grabSampleFromFloor(),
 
                 // hand sample 3 to human
                 drive.actionBuilder(new Pose2d(getTeamSamplePosition(3), Math.toRadians(TEAM_SAMPLE_HEADING)))
