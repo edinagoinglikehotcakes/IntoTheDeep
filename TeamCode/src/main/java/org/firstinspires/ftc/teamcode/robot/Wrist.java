@@ -19,11 +19,13 @@ public class Wrist {
     private double realCollectionPosition;
 
     public static double STARTWRIST              = 0;
-    public static double COLLECTIONWRIST         = 0.56;
-    public static double BASKETANDCHAMBERWRIST   = 0.42;
+    public static double COLLECTIONWRIST         = 0.62;
+    public static double BASKETANDCHAMBERWRIST   = 0.45;
     public static double SCOOTCH                 = .0125;
     private static double MINWRIST               = 0;
     private static double MAXWRIST               = 0.8;
+    public static double MANUALCOLLECTIONWRIST         = 0.175;
+
 
     private double remember_Position;
     private double ACCURACY = 0.05;
@@ -32,8 +34,15 @@ public class Wrist {
         opmode = op;
     }
     public void init() {
+        init(true);
+    }
+    public void init(boolean auto) {
         wristServo = opmode.hardwareMap.get(Servo.class, "Wrist_Servo");
-        realCollectionPosition = COLLECTIONWRIST;
+        if (auto)
+            realCollectionPosition = COLLECTIONWRIST;
+        else
+            realCollectionPosition = MANUALCOLLECTIONWRIST;
+
 
     }
 
@@ -54,7 +63,7 @@ public class Wrist {
         wristServo.setPosition(remember_Position);
     }
     public void collectionwrist () {
-        remember_Position =COLLECTIONWRIST;
+        remember_Position =realCollectionPosition;
         wristServo.setPosition(remember_Position);
     }
     public void basketandchamberwrist (){

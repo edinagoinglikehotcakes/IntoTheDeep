@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.robot.Claw;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.Wrist;
 
-@Disabled
 @Config
 @Autonomous(name = "Auto_Observation", group = "Autonomous", preselectTeleOp = "Manual Driving")
 
@@ -191,7 +190,10 @@ public class Auto_Observation extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        move = buildSpecimens(drive);
+        move = drive.actionBuilder(STARTING_POSE_SPECIMEN)
+                .strafeToConstantHeading(new Vector2d(-63.0,63.0))
+                .build();
+                //buildSpecimens(drive);
 
         waitForStart();
 

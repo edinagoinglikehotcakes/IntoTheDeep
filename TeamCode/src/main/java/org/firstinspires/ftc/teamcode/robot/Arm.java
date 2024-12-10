@@ -34,11 +34,13 @@ public class Arm {
     private boolean initialized = false;
 
     public static int START_POSITION          = 20;
-    public static int COLLECTION_POSITION     = 4000;
-    public static int OVER_BARRIER_POSITION   = 3600;
+    public static int COLLECTION_POSITION     = 4100;
+    public static int OVER_BARRIER_POSITION   = 3500;
     public static int MAX_COLLECTION_WRIST    = 3000;
     public static int PUT_IN_BASKET_POSITION  = 2400;
     public static int AUTO_PUT_IN_BASKET_POSITION  = 2400;
+    public static int MANUALCOLLECTION_POSITION     = 3540;
+
 
     public static int PUT_ON_CHAMBER_POSITION = 2500;
     public static int READY_TO_RUNG_POSITION = 1775;
@@ -46,7 +48,7 @@ public class Arm {
     public static int HANGING_POSITION        = 20;
 
     public static int SCOOTCH                 = 2;
-    public static int MAXARM                  = 4100;
+    public static int MAXARM                  = 4200;
     public static int MINARM                  = 0;
 
     public static int ACCURACY                = 10;
@@ -56,11 +58,17 @@ public class Arm {
     public Arm (OpMode op) {
         opmode = op;
     }
-
     public void init() {
+        init(true);
+    }
+
+    public void init(boolean auto) {
         ArmMotor = opmode.hardwareMap.get(DcMotor.class, "ArmMotor");
 
-        realCollectionPosition = COLLECTION_POSITION;
+        if (auto)
+            realCollectionPosition = COLLECTION_POSITION;
+        else
+            realCollectionPosition = MANUALCOLLECTION_POSITION;
 
         ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);

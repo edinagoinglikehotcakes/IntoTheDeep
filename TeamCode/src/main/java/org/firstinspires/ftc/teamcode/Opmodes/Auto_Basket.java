@@ -36,29 +36,32 @@ public class Auto_Basket extends LinearOpMode {
     public static Pose2d STARTING_POSE_BASKET = new Pose2d(16.5, 63.0, Math.toRadians(BASKET_START_HEADING));
 
     //samples
-    public static double SAMPLE_Y = 25.0+24.0-6.5;
+    public static double SAMPLE_Y = 42.5-0.5;
+    //public static double SAMPLE_Y = 25.0+24.0-6.5;
     public static double SAMPLE_MOVE = 16.5;
 
 
-    public static Vector2d YELLOW_FLOOR_SAMPLE = new Vector2d(48.0-10.5, SAMPLE_Y);
+    public static Vector2d YELLOW_FLOOR_SAMPLE = new Vector2d(48.0-9, SAMPLE_Y);
     public static double BACKOFF = 10.0;
     public static double YELLOW_SAMPLE_HEADING = 315.0;
 
     //Basket locations
-    public static Vector2d BASKET = new Vector2d(69-10-2.5,69-28-3);
+//    public static Vector2d BASKET = new Vector2d(60,45);
+    public static Vector2d BASKET = new Vector2d(62,41);
+
     public static double BASKET_HEADING = 45.0;
 
-    public static double SAFEY = 45.0;
-    public static double SAFEY2 = 25.0;
-    public static Vector2d SAFE = new Vector2d(SAFEY,SAMPLE_Y);
-    public static Vector2d SAFE2 = new Vector2d(SAFEY2,SAMPLE_Y);
+    public static double SAFEX = 45.0;
+    public static double SAFEX2 = 25.0;
+    public static Vector2d SAFE = new Vector2d(SAFEX,SAMPLE_Y);
+    public static Vector2d SAFE2 = new Vector2d(SAFEX2,SAMPLE_Y);
 
-    public static double FUDGE = 5.0;
+    public static double FUDGE = 10.0;
 
     public static double TEMP_HEADING = 180.0;
 
-    public static double CLAW_CLOSE_WAIT = 0.5;
-    public static double CLAW_OPEN_WAIT = 0.5;
+    public static double CLAW_CLOSE_WAIT = 0.3;
+    public static double CLAW_OPEN_WAIT = 0.3;
 
     private Action grabSampleFromFloor(MecanumDrive drive, Pose2d start){
         return new SequentialAction(
@@ -98,12 +101,13 @@ public class Auto_Basket extends LinearOpMode {
 
     private static Vector2d getYellowSamplePosition(int whichvisit){
         if (whichvisit<3)
-            return YELLOW_FLOOR_SAMPLE.plus(new Vector2d(SAMPLE_MOVE*(whichvisit-1),3*(whichvisit-1)));
-        return YELLOW_FLOOR_SAMPLE.plus(new Vector2d(SAMPLE_MOVE*(whichvisit-1)-FUDGE,3*(whichvisit-1)));
+            return YELLOW_FLOOR_SAMPLE.plus(new Vector2d(SAMPLE_MOVE*(whichvisit-1),1*(whichvisit-1)));
+        return YELLOW_FLOOR_SAMPLE.plus(new Vector2d(SAMPLE_MOVE*(whichvisit-1)-FUDGE,1*(whichvisit-1)));
     }
     private Action buildBasket(MecanumDrive drive){
         return new SequentialAction(
                 RobotClaw.clawAction(Claw.CLOSEPOSITION),
+                RobotWrist.wristAction(Wrist.STARTWRIST),
                 //go to Chamber with hand specimen and move in
                 dropInBasket(
                         drive.actionBuilder(STARTING_POSE_BASKET)
@@ -126,10 +130,10 @@ public class Auto_Basket extends LinearOpMode {
                 dropInBasket(
                         drive.actionBuilder(new Pose2d(getYellowSamplePosition(2).minus(new Vector2d(0,BACKOFF)), Math.toRadians(YELLOW_SAMPLE_HEADING)))
                                 .strafeTo(SAFE2)
-                                .strafeToLinearHeading(BASKET, Math.toRadians(BASKET_HEADING))
+                                .strafeToLinearHeading(BASKET.plus(new Vector2d(2,0)), Math.toRadians(BASKET_HEADING))
                                 .build()
                 ),
-                drive.actionBuilder(new Pose2d(BASKET,Math.toRadians(BASKET_HEADING)))
+                drive.actionBuilder(new Pose2d(BASKET.plus(new Vector2d(2,0)),Math.toRadians(BASKET_HEADING)))
                         .strafeTo(SAFE2)
                         .build(),
                 new ParallelAction(
@@ -145,7 +149,7 @@ public class Auto_Basket extends LinearOpMode {
                 dropInBasket(
                         drive.actionBuilder(new Pose2d(getYellowSamplePosition(3), Math.toRadians(YELLOW_SAMPLE_HEADING)))
                                 .strafeTo(SAFE2)
-                                .strafeToLinearHeading(BASKET, Math.toRadians(BASKET_HEADING))
+                                .strafeToLinearHeading(BASKET.plus(new Vector2d(2,0)), Math.toRadians(BASKET_HEADING))
                                 .build()
                 )
         );
